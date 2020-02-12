@@ -1,0 +1,6 @@
+1) displays albums which share a birthday with the user
+	a) album data saving/inserting
+	b) display albums with date filtration
+	c) album info structure model
+	d) json web-service implementation for recieving albums using data
+2) date comparison settings (search for albums with a given date using setup settings)
