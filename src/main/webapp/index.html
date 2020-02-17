@@ -1,16 +1,68 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Start Page</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script src="/jquery-3.4.1.min.js"></script>
-        <script>
-        window.onload = function() {
-            alert( "welcome" );
-        };
-        </script>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
+    <head> 
+        <title> 
+            jQuery getJSON() Method 
+        </title> 
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+        </script> 
+
+        <!-- Script to get JSON file and display its content --> 
+        <script type = "text/javascript" language="javascript">
+            
+            (function ($) {
+                $.fn.invisible = function () {
+                    return this.each(function () {
+                        $(this).css("visibility", "hidden");
+                    });
+                };
+                $.fn.visible = function () {
+                    return this.each(function () {
+                        $(this).css("visibility", "visible");
+                    });
+                };
+            }(jQuery));
+            
+            $(document).ready(function () {
+                $.ajaxSetup({ cache: false });
+                $('#albums').invisible();
+                
+                $("#fetch").click(function (event) {
+                    $("#albums").empty();
+                    $.getJSON('http://localhost:8080/AlbumProject/AlbumWSServlet', function (albums) {
+                        /*
+                         $.each(albums, function (index, album) {
+                         $('#albums').append('<p>' + album.artist + '</p>');
+                         */
+                        $('#albums').visible();
+                        $('#albums').append('<tr><th>Artist</th><th>Album</th><th>Release</th></tr>');
+                        for (i = 0; i < albums.length; i++) {
+                            album = albums[i];
+                            $('#albums').append('<tr>');
+                            $('#albums').append('<td>' + album.artist + '</td>');
+                            $('#albums').append('<td>' + album.title + '</td>');
+                            $('#albums').append('<td>' + album.release + '</td>');
+                            $('#albums').append('</tr>');
+                        }
+                    });
+                });
+                
+                $("#clean").click(function(event) {
+                    $("#albums").empty();
+                    $('#albums').invisible();
+                });
+                
+            });
+        </script> 
+    </head> 
+
+    <body> 
+
+        <table id = "albums" border="1"></table> 
+
+        <input type = "button" id = "fetch" value = "Fetch Albums">
+        <input type = "button" id = "clean" value = "Clean Table">
+
+    </body> 
 </html>

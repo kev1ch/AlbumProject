@@ -4,7 +4,10 @@ package com.pavlov.albumproject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,9 +21,16 @@ public class AlbumWSServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
-            Album album_object = new Album("Artist", "Title", new Date());
+            Random rnd_num = new Random();
+            List<Album> album_list = new ArrayList<>();
+            for (int i = 0; i < 20; i++) {
+                Album album_object = new Album("Artist" + rnd_num.nextInt(100),
+                                               "Title" + rnd_num.nextInt(100), new Date());
+                album_list.add(album_object);
+            }
             ObjectMapper mapper = new ObjectMapper();
-            out.print(mapper.writeValueAsString(album_object));
+            String json_string = mapper.writeValueAsString(album_list);
+            out.print(json_string);
         }
     }
 
