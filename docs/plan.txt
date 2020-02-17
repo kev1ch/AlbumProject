@@ -6,7 +6,7 @@
 2) date comparison settings (search for albums with a given date using setup settings)
 
 tasks:
-1) table column sort - medium
+1) table column sort - medium - DONE
 2) filtering - medium
 3) add the ability to check albums by date to frontend - high
 4) add javascript calendar to frontend - medium

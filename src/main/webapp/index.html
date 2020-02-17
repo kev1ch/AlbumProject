@@ -10,7 +10,9 @@
 
         <!-- Script to get JSON file and display its content --> 
         <script type = "text/javascript" language="javascript">
-            
+
+            var albums;
+
             (function ($) {
                 $.fn.invisible = function () {
                     return this.each(function () {
@@ -23,41 +25,77 @@
                     });
                 };
             }(jQuery));
-            
+
+            function compareAZ(album1, album2) {
+                if (album1.title < album2.title) {
+                    return -1;
+                }
+                if (album1.title > album2.title) {
+                    return 1;
+                }
+                return 0;
+            }
+
+            function compareZA(album1, album2) {
+                return compareAZ(album2, album1);
+            }
+
+            function showAlbumTable() {
+                $("#albums").empty();
+                $('#albums').visible();
+                $('#albums').append('<tr><th>Artist</th><th>Album</th><th>Release</th></tr>');
+                var sorting_value = $('#sortby').children("option:selected").val();
+                switch (sorting_value) {
+                    case 'AZ':
+                        albums.sort(compareAZ);
+                        break;
+                    case 'ZA':
+                        albums.sort(compareZA);
+                        break;
+                    default:
+                        albums.sort(compareAZ);
+                }
+                for (i = 0; i < albums.length; i++) {
+                    album = albums[i];
+                    $('#albums').append('<tr>');
+                    $('#albums').append('<td>' + album.artist + '</td>');
+                    $('#albums').append('<td>' + album.title + '</td>');
+                    $('#albums').append('<td>' + album.release + '</td>');
+                    $('#albums').append('</tr>');
+                }
+            }
+
             $(document).ready(function () {
-                $.ajaxSetup({ cache: false });
+                $.ajaxSetup({cache: false});
                 $('#albums').invisible();
-                
+                $('#sortby').on('change', function () {
+                    showAlbumTable();
+                });
+
                 $("#fetch").click(function (event) {
-                    $("#albums").empty();
-                    $.getJSON('http://localhost:8080/AlbumProject/AlbumWSServlet', function (albums) {
-                        /*
-                         $.each(albums, function (index, album) {
-                         $('#albums').append('<p>' + album.artist + '</p>');
-                         */
-                        $('#albums').visible();
-                        $('#albums').append('<tr><th>Artist</th><th>Album</th><th>Release</th></tr>');
-                        for (i = 0; i < albums.length; i++) {
-                            album = albums[i];
-                            $('#albums').append('<tr>');
-                            $('#albums').append('<td>' + album.artist + '</td>');
-                            $('#albums').append('<td>' + album.title + '</td>');
-                            $('#albums').append('<td>' + album.release + '</td>');
-                            $('#albums').append('</tr>');
-                        }
+                    $.getJSON('http://localhost:8080/AlbumProject/AlbumWSServlet',
+                                                      function (recieved_albums) {
+                        albums = recieved_albums;
+                        showAlbumTable();
                     });
                 });
-                
-                $("#clean").click(function(event) {
+
+                $("#clean").click(function (event) {
                     $("#albums").empty();
                     $('#albums').invisible();
                 });
-                
+
             });
         </script> 
     </head> 
 
     <body> 
+
+        <label for="sortby">Sort by:</label>
+        <select id="sortby">
+            <option value="AZ">Album title A-Z</option>
+            <option value="ZA">Album title Z-A</option>
+        </select>
 
         <table id = "albums" border="1"></table> 
 
