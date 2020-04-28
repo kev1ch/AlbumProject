@@ -4,6 +4,10 @@ package com.pavlov.albumproject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,17 +25,43 @@ public class AlbumWSServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
-            Random rnd_num = new Random();
-            List<Album> album_list = new ArrayList<>();
-            for (int i = 0; i < 20; i++) {
-                Album album_object = new Album("Artist" + rnd_num.nextInt(100),
-                                               "Title" + rnd_num.nextInt(100), new Date());
-                album_list.add(album_object);
-            }
+            List<Album> album_list = loadAlbumsFromDataBase();
             ObjectMapper mapper = new ObjectMapper();
             String json_string = mapper.writeValueAsString(album_list);
             out.print(json_string);
         }
+    }
+    
+    private List<Album> loadAlbumsFromDataBase() {
+        List<Album> album_list = new ArrayList<>();
+        Connection conn = null;
+        try {
+            Class.forName("org.hsqldb.jdbcDriver");
+            conn = DriverManager.getConnection("jdbc:hsqldb:file:"
+                    + "C:\\temp\\albumdatabase\\albumdatabase", "SA", "");
+            Statement statement = conn.createStatement();
+            ResultSet result = statement.executeQuery("select AlbumID, Artist, Title, Release from Album");
+            while (result.next()) {
+                long id = result.getInt("AlbumID");
+                String artist = result.getString("Artist");
+                String title = result.getString("Title");
+                long release = result.getInt("Release");
+                Album new_album = new Album(id, artist, title, new Date(release));
+                album_list.add(new_album);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.commit();
+                    conn.close();
+                } catch(Exception exception) {
+                    // exception caught
+                }
+            }
+        }
+        return album_list;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -8,8 +8,10 @@ public class Album {
     private String artist;
     private String title;
     private Date release;
+    private long id;
     
-    public Album(String artist, String title, Date release) {
+    public Album(long id, String artist, String title, Date release) {
+        this.id = id;
         this.artist = artist;
         this.title = title;
         this.release = release;
@@ -27,4 +29,7 @@ public class Album {
         return release;
     }
     
+    public long getId() {
+        return id;
+    }
 }

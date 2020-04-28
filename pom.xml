@@ -4,7 +4,7 @@
 
     <groupId>com.pavlov</groupId>
     <artifactId>AlbumProject</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <packaging>war</packaging>
 
     <name>AlbumProject</name>
