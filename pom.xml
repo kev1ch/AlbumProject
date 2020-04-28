@@ -4,7 +4,7 @@
 
     <groupId>com.pavlov</groupId>
     <artifactId>AlbumProject</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <packaging>war</packaging>
 
     <name>AlbumProject</name>
@@ -37,6 +37,13 @@
             <artifactId>jackson-annotations</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.4.0</version>
+            <!--scope>test</scope-->
+        </dependency>
+
     </dependencies>
 
     <build>

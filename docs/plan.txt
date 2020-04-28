@@ -7,8 +7,9 @@
 
 tasks:
 1) table column sort - medium - DONE
-2) filtering - medium
+2) filtering - medium - DONE
 3) add the ability to check albums by date to frontend - high
 4) add javascript calendar to frontend - medium
 5) uploading albums to the server - high
 6) big task with decomposition - design - small
+7) pagination

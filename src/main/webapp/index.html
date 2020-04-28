@@ -55,8 +55,15 @@
                     default:
                         albums.sort(compareAZ);
                 }
+                var filter_value = $("#filterby").val();
                 for (i = 0; i < albums.length; i++) {
                     album = albums[i];
+                    var album_title = album.title;
+                    var artist_name = album.artist;
+                    if (filter_value.length > 0 && album_title.indexOf(filter_value) < 0 &&
+                        artist_name.indexOf(filter_value) < 0) {
+                        continue;
+                    }
                     $('#albums').append('<tr>');
                     $('#albums').append('<td>' + album.artist + '</td>');
                     $('#albums').append('<td>' + album.title + '</td>');
@@ -69,6 +76,11 @@
                 $.ajaxSetup({cache: false});
                 $('#albums').invisible();
                 $('#sortby').on('change', function () {
+                    showAlbumTable();
+                });
+                
+                $("#filterby").on("input", function(){
+                    // alert($(this).val());
                     showAlbumTable();
                 });
 
@@ -96,7 +108,12 @@
             <option value="AZ">Album title A-Z</option>
             <option value="ZA">Album title Z-A</option>
         </select>
+        
+        <br>
 
+        <label for="filterby">Filter for:</label>
+        <input type = "text" id = "filterby" value = "">
+        
         <table id = "albums" border="1"></table> 
 
         <input type = "button" id = "fetch" value = "Fetch Albums">
